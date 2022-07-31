@@ -5,3 +5,11 @@ class Nodo:
         self.coordenadas = coordenadas
         self.utilidad = utilidad
         self.padre = padre
+
+
+    #def __eq__(self, __o: object) -> bool:
+    #    return self.utilidad > __o.utilidad
+
+
+    #def __lt__(self, other):
+    #    return self.utilidad > other.utilidad
