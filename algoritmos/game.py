@@ -7,12 +7,12 @@ import numpy as np
 all_profundidad = []
 test_list = [ # maquina -> 9, humano -> 8
     [9, 1, 0, 3, 0], # 0
-    [1, 0, 3, 0, 1], # 1
+    [1, 0, 8, 0, 1], # 1
     [0, 1, 0, 5, 1], # 2
-    [3, 5, 0, 8, 0], # 3
+    [3, 5, 0, 0, 0], # 3
     [1, 0, 0, 0, 0], # 4
 ]
-profundidad = 2
+profundidad = 6
 
 mundo_aux = [ # maquina -> 9, humano -> 8
     [0, 1, 0, 3, 0, 3, 0, 0], # 0
@@ -80,7 +80,7 @@ def _max(lista) -> bool:
         for i in range(1, len(sub_hijos)):
             if sub_hijos[i].nodo_elegido.utilidad > o_max[1]:
                 o_max = (sub_hijos[i].nodo_elegido, sub_hijos[i].nodo_elegido.utilidad)        
-        try: # En la profundidad 0, los nodos no tienen padres, por consecuencia no tienen nodos elegidos, 
+        try: # En la profundidad 1, los nodos no tienen padres, por consecuencia no tienen nodos elegidos, 
              # por lo anterior se captura la excepción de tipo AttributeError y se crea un nuevo padre para el nodo en consecuencia
             padre_hijos.padre.nodo_elegido = o_max[0]  
         except AttributeError: 
@@ -136,5 +136,6 @@ def obtener_movimiento() -> tuple:
 
 
 print((obtener_movimiento()))
-print(all_profundidad[0].padres_hijos[0].padre)
+#print(all_profundidad[0].padres_hijos[0].padre)
 #print(cantidad_nodos)
+#print(all_profundidad[profundidad-1].padres_hijos[0].hijos[0].utilidad)
