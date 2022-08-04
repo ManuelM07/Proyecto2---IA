@@ -32,7 +32,7 @@ class EstadoJuego():
         posibilidades = [ "wN", "bN",
                           "ce", "ce", "ce", "ce",  "ce", "ce", "ce", "ce", "ce", "ce", "ce", "ce", "ce", "ce",
                           "fl", "fl", "fl", "fl", "fl",
-                          "ma", "ma"]
+                          "ma", "ma" ]
 
         while posibilidades:
             fila = random.randint(0, 7)

@@ -62,6 +62,7 @@ def main():
                     print(mover.getNotacionAjedrez())
                     
                     if mover in movimientos_val:
+                        print("")
                         estado_juego.realizar_movimiento(mover)
                         #print("pieza capturada: ", mover.pieza_capturada)
                         movimiento_hecho = True
