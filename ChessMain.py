@@ -58,8 +58,8 @@ def main():
 
     pos_actual_wN = ()
     pos_actual_bN = ()
-    primerMovimiento(horse1, estado_juego, movimientos_val)
-    print("mov_hecho: ", movimiento_hecho)
+    #primerMovimiento(horse1, estado_juego, movimientos_val)
+    #print("mov_hecho: ", movimiento_hecho)
     while ejecutando:
     
         for e in pg.event.get():
@@ -104,19 +104,19 @@ def main():
 
             print("nueva: ", nueva_coordenada_wN) 
             print("válidos: ", (movimientos_val[0].fila_final, movimientos_val[0].columna_final), (movimientos_val[1].fila_final, movimientos_val[1].columna_final))
-            mover = ChessEngine.Mover(pos_actual_wN, nueva_coordenada_wN, estado_juego.tablero)
+            mover = ChessEngine.Mover(nuevo_tablero[1], nueva_coordenada_wN, estado_juego.tablero)
             pos_actual_wN = nueva_coordenada_wN
-            #if mover in movimientos_val:
-            clock.tick(1)
-            estado_juego.realizar_movimiento(mover)
-            print("valido caballo blanco")
-            movimiento_hecho = True
-            print("mov_hecho: ", movimiento_hecho)
-            print("marcador: ", estado_juego.marcador)
-            cuadrado_seleccionado = () #restablecer los clicks del usuario
-            clicks_jugador = []
-            #else:
-            #    print("¡inválido!")
+            if mover in movimientos_val:
+                clock.tick(1)
+                estado_juego.realizar_movimiento(mover)
+                print("valido caballo blanco")
+                movimiento_hecho = True
+                print("mov_hecho: ", movimiento_hecho)
+                print("marcador: ", estado_juego.marcador)
+                cuadrado_seleccionado = () #restablecer los clicks del usuario
+                clicks_jugador = []
+            else:
+                print("¡inválido!")
 
 
         if movimiento_hecho:
@@ -127,7 +127,7 @@ def main():
         dibujarEstadoJuego(pantalla, estado_juego)
         clock.tick(MAX_FPS)
         pg.display.flip()
-
+""" 
 def primerMovimiento(horse1, estado_juego,  movimientos_val):
     global movimiento_hecho, pos_actual_wN, clock
     nueva_coordenada_wN = start(horse1)   
@@ -141,7 +141,7 @@ def primerMovimiento(horse1, estado_juego,  movimientos_val):
         clock.tick(1)
         estado_juego.realizar_movimiento(mover)
         movimiento_hecho = True
-        print("marcador: ", estado_juego.marcador)
+        print("marcador: ", estado_juego.marcador) """
 
 def dibujarEstadoJuego(pantalla, estado_juego):
     dibujarTablero(pantalla)

@@ -12,7 +12,7 @@ test_list = [ # maquina -> 9, humano -> 8
     [3, 5, 0, 0, 0], # 3
     [1, 0, 0, 0, 0], # 4
 ]
-profundidad = 2
+profundidad = 6
 
 mundo_aux = [ # maquina -> 9, humano -> 8
     [0, 1, 0, 3, 0, 3, 0, 0], # 0
