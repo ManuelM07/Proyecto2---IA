@@ -12,7 +12,7 @@ test_list = [ # maquina -> 9, humano -> 8
     [3, 5, 0, 0, 0], # 3
     [1, 0, 0, 0, 0], # 4
 ]
-profundidad = 6
+profundidad = 2
 
 mundo_aux = [ # maquina -> 9, humano -> 8
     [0, 1, 0, 3, 0, 3, 0, 0], # 0
@@ -29,45 +29,48 @@ mundo_aux = [ # maquina -> 9, humano -> 8
 # machine = 5 5 5 1 3
 # humanoide = 3 3 3 1 1 1 1 1
 
-horse1 = Horse(mundo_aux, (2, 2), (3, 3), 9, 0)
+horse1 = None #Horse(mundo_aux, (2, 2), (3, 3), 9, 0)
 #horse1.nuevos_movimientos
-for i in range(profundidad): # itera la cantidad de profundidades que hay
-    count = 0
-    aux_profundidad = np.array([])
-    if i: # se verifica quien viene con el turno para pasarselo al otro participante
-        if horse1.tipo_jugador == 9:
-            horse1.tipo_jugador = 8
-            horse1.coordenadas = horse1.coordenadas_humano
-        else:
-            horse1.tipo_jugador = 9
-            horse1.coordenadas = horse1.coordenadas_maquina
+def start():
+    for i in range(profundidad): # itera la cantidad de profundidades que hay
+        count = 0
+        aux_profundidad = np.array([])
+        if i: # se verifica quien viene con el turno para pasarselo al otro participante
+            if horse1.tipo_jugador == 9:
+                horse1.tipo_jugador = 8
+                horse1.coordenadas = horse1.coordenadas_humano
+            else:
+                horse1.tipo_jugador = 9
+                horse1.coordenadas = horse1.coordenadas_maquina
 
-        ##########
-        #print(f"longitud: {(all_profundidad[i-1].total_nodos())}")
-        j = 0
-        #cantidad_nodos += all_profundidad[i-1].total_nodos()
-        for _ in range(all_profundidad[i-1].total_nodos()): # itera la cantidadad de nodos que se generaron en la anterior profundidad, 
-                                                            # ya que esos hijos se convierte en los padres de la profundidad siguiente
-        #    print("problem",all_profundidad[i-1].padres_hijos[count])
-            #exit()
-            try:
-                horse1.padre = all_profundidad[i-1].padres_hijos[count].hijos[j] #horse1.nuevos_movimientos[j]
-            except IndexError:
-                j = 0
-                count += 1
-                #print("problemx",all_profundidad[i-1].padres_hijos[count].hijos)
-                horse1.padre = all_profundidad[i-1].padres_hijos[count].hijos[j] #horse1.nuevos_movimientos[j]
+            ##########
+            #print(f"longitud: {(all_profundidad[i-1].total_nodos())}")
+            j = 0
+            #cantidad_nodos += all_profundidad[i-1].total_nodos()
+            for _ in range(all_profundidad[i-1].total_nodos()): # itera la cantidadad de nodos que se generaron en la anterior profundidad, 
+                                                                # ya que esos hijos se convierte en los padres de la profundidad siguiente
+            #    print("problem",all_profundidad[i-1].padres_hijos[count])
+                #exit()
+                try:
+                    horse1.padre = all_profundidad[i-1].padres_hijos[count].hijos[j] #horse1.nuevos_movimientos[j]
+                except IndexError:
+                    j = 0
+                    count += 1
+                    #print("problemx",all_profundidad[i-1].padres_hijos[count].hijos)
+                    horse1.padre = all_profundidad[i-1].padres_hijos[count].hijos[j] #horse1.nuevos_movimientos[j]
 
-            j += 1
+                j += 1
+                hijos = horse1.movimientos()
+
+                aux_profundidad = np.append(aux_profundidad, PadreHijo(horse1.padre, hijos))        
+            ###########
+        else: 
             hijos = horse1.movimientos()
-
-            aux_profundidad = np.append(aux_profundidad, PadreHijo(horse1.padre, hijos))        
-        ###########
-    else: 
-        hijos = horse1.movimientos()
-        horse1.nuevos_movimientos = hijos
-        aux_profundidad = np.append(aux_profundidad, PadreHijo(hijos=hijos))
-    all_profundidad.append(Profundidad(aux_profundidad))
+            horse1.nuevos_movimientos = hijos
+            aux_profundidad = np.append(aux_profundidad, PadreHijo(hijos=hijos))
+        all_profundidad.append(Profundidad(aux_profundidad))
+    
+    return obtener_movimiento()
 
 
 def _max(lista) -> bool:
@@ -135,7 +138,8 @@ def obtener_movimiento() -> tuple:
     return answer.coordenadas
 
 
-print((obtener_movimiento()))
+#start()
+#print((obtener_movimiento()))
 #print(all_profundidad[0].padres_hijos[0].padre)
 #print(cantidad_nodos)
 #print(all_profundidad[profundidad-1].padres_hijos[0].hijos[0].utilidad)

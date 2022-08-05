@@ -4,6 +4,8 @@ en pantalla el objeto de estado actual del juego (GameState).
 """
 import pygame as pg
 import ChessEngine 
+from algoritmos.game import horse1, start
+from algoritmos.horse import Horse
 ANCHO = 512  #400
 ALTO = ANCHO 
 DIMENSION = 8 #dimensiones de un tablero de ajedrez 8x8
@@ -37,7 +39,8 @@ def main():
     movimientos_val = estado_juego.get_mov_validos()
     print("mov válidos: ", movimientos_val)
     movimiento_hecho = False # variable bandera para cuando se realiza un movimiento
-
+    horse1 = Horse(estado_juego.nuevo_tablero[0], estado_juego.nuevo_tablero[1], estado_juego.nuevo_tablero[2], 9, 0)
+    nueva_coordenada_wN = ()
 
     cargar_imagenes()
     ejecutando = True
@@ -73,6 +76,8 @@ def main():
                         print("¡movimiento inválido!")
                         clicks_jugador = [cuadrado_seleccionado]
                     
+        if estado_juego.mueve_blanco:
+            nueva_coordenada_wN = start()    
 
 
         if movimiento_hecho:

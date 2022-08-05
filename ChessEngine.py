@@ -1,4 +1,5 @@
 ﻿import random
+
 """ 
 Esta clase es responsable de restaurar toda de la información del
 estado actual del juego. También será responsable de determinar los
@@ -24,9 +25,12 @@ class EstadoJuego():
         self.funciones_desplazamiento = {"N": self.get_movimientos_caballo}
         self.mueve_blanco = True
         self.registro_movimientos = []
-        self.generar_random()
         self.marcador = [0, 0]
         self.puntajes = { "ce":1, "fl":3, "ma":5, "--":0 }
+        self.generar_random()
+        self.nuevo_tablero = self.mapear_matriz()
+
+
     
     def generar_random(self):
         posibilidades = [ "wN", "bN",
@@ -41,6 +45,32 @@ class EstadoJuego():
             if anterior == "--":
                 random.shuffle(posibilidades)
                 self.tablero[fila][columna] = posibilidades.pop()
+        self.mapear_matriz()
+        
+    
+    def mapear_matriz(self):
+        valores = self.puntajes 
+        valores["wN"] = 9 
+        valores["bN"] = 8
+        valores["--"] = 0
+        nuevo_tablero = []
+        pos_wN = ()
+        pos_bN = ()
+
+        for fila in range(len(self.tablero)):
+            nuevo_tablero.append([])
+            for col in range(len(self.tablero[fila])):
+                valor = self.tablero[fila][col]
+                nuevo_tablero[fila].append(valores[valor])  
+                if valor == "wN":
+                    pos_wN = (fila, col)
+                elif valor == "bN":
+                    pos_bN = (fila, col)
+    
+        #nuevo_tablero = list(map(lambda fila : list(map(lambda x : valores[x], fila)), self.tablero))
+        return [nuevo_tablero, pos_wN, pos_bN]
+
+
 
     def realizar_movimiento(self, mover):
         actual = self.tablero[mover.fila_inicial][mover.columna_inicial]
