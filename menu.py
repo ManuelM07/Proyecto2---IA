@@ -67,7 +67,7 @@ def options():
         EXPERTO.update(SCREEN)
 
         OPTIONS_BACK = Button(image=None, pos=(ANCHO//2, 480), 
-                            text_input="REGRESAR", font=get_font(30), base_color="Black", hovering_color="Green")
+                            text_input="REGRESAR", font=get_font(25), base_color="Black", hovering_color="Green")
 
         OPTIONS_BACK.changeColor(OPTIONS_MOUSE_POS)
         OPTIONS_BACK.update(SCREEN)

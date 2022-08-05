@@ -83,6 +83,8 @@ class EstadoJuego():
             self.registro_movimientos.append(mover)
             i = 0 if self.mueve_blanco else 1 #0 -> juega el blanco, 1 juega el negro
             self.marcador[i] += self.puntajes[mover.pieza_capturada]
+            if mover.pieza_capturada != "--":
+                self.total_items -= 1
             self.mueve_blanco = not self.mueve_blanco #intercambiar jugadores
             return True
         else:
@@ -119,6 +121,14 @@ class EstadoJuego():
                 if (pieza_f[0] != color_aliado) and (pieza_f[1] != "N"): #no hay una pieza aliada -> vacío o enemigo.
                     movimientos.append(Mover((fila, columna), (fila_f, col_f), self.tablero))
 
+    def termina_juego(self):
+        if self.total_items == 0: #se termina el juego
+            if self.marcador[0] > self.marcador[1]: #gana la máquina
+                return "P1"
+            else:
+                return "P2"
+        else:
+            return False
 
 class Mover():
     # mapear claves a valores

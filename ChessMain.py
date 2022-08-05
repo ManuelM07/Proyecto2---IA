@@ -6,16 +6,16 @@ import pygame as pg
 import ChessEngine 
 from algoritmos.game import  start
 from algoritmos.horse import Horse
+
 ANCHO = 512  #400
 ALTO = ANCHO 
 DIMENSION = 8 #dimensiones de un tablero de ajedrez 8x8
 TAM_CUADRADO = ALTO // DIMENSION
-MAX_FPS = 15 #para las animaciones
+fps = 15 #para las animaciones
 IMAGENES = {}
 
 puntaje_ia = 0
 puntaje_jugador = 0
-marcador = [puntaje_ia, puntaje_jugador]
 
 """ 
 Inicializar un diccionario global de imágenes. Se llamará solo una vez desde el main.
@@ -29,7 +29,7 @@ def cargar_imagenes():
 Principal driver del código, Manejará la entrada del usuario y actualizará los gráficos.
 """
 def main(profundidad):
-    global movimiento_hecho, pos_actual_wN, clock
+    global movimiento_hecho, clock
     #setup
     pg.init()
     pantalla = pg.display.set_mode((ANCHO, ALTO))
@@ -56,16 +56,15 @@ def main(profundidad):
     dibujarEstadoJuego(pantalla, estado_juego)
     pg.display.flip()
 
-    pos_actual_wN = ()
-    pos_actual_bN = ()
-    #primerMovimiento(horse1, estado_juego, movimientos_val)
-    #print("mov_hecho: ", movimiento_hecho)
+    fin = False
+
     while ejecutando:
     
         for e in pg.event.get():
             if e.type == pg.QUIT:
                 ejecutando = False
-            elif e.type == pg.MOUSEBUTTONDOWN:
+            elif e.type == pg.MOUSEBUTTONDOWN and not fin:
+                fps = 20
                 localizacion = pg.mouse.get_pos() #pos x,y del ratón
                 columna = localizacion[0] // TAM_CUADRADO
                 fila = localizacion[1] // TAM_CUADRADO
@@ -90,13 +89,13 @@ def main(profundidad):
                         movimiento_hecho = True
                         cuadrado_seleccionado = () #restablecer los clicks del usuario
                         clicks_jugador = []
-                        pos_actual_bN = (mover.fila_final, mover.columna_final)
                         print("marcador: ", estado_juego.marcador)
                     else: 
                         print("¡movimiento inválido!")
                         clicks_jugador = [cuadrado_seleccionado]
                     
-        if estado_juego.mueve_blanco:
+        if estado_juego.mueve_blanco and not fin:
+            fps = 1
             nuevo_tablero = estado_juego.mapear_matriz()
             #horse1 = Horse(estado_juego.nuevo_tablero[0], estado_juego.nuevo_tablero[1], estado_juego.nuevo_tablero[2], 9, 0)
             print("nuevo:", nuevo_tablero[0])
@@ -105,9 +104,7 @@ def main(profundidad):
             print("nueva: ", nueva_coordenada_wN) 
             print("válidos: ", (movimientos_val[0].fila_final, movimientos_val[0].columna_final), (movimientos_val[1].fila_final, movimientos_val[1].columna_final))
             mover = ChessEngine.Mover(nuevo_tablero[1], nueva_coordenada_wN, estado_juego.tablero)
-            pos_actual_wN = nueva_coordenada_wN
             if mover in movimientos_val:
-                clock.tick(1)
                 estado_juego.realizar_movimiento(mover)
                 print("valido caballo blanco")
                 movimiento_hecho = True
@@ -118,30 +115,20 @@ def main(profundidad):
             else:
                 print("¡inválido!")
 
+        if not fin:
+            dibujarEstadoJuego(pantalla, estado_juego)
 
-        if movimiento_hecho:
+        if movimiento_hecho and not fin:
             print("entra a movimiento_hecho")
             movimientos_val = estado_juego.get_mov_validos()
             movimiento_hecho = False
+            fin = estado_juego.termina_juego()
+            if fin:
+                clock.tick(1)
+                game_over(pantalla, fin, estado_juego)
 
-        dibujarEstadoJuego(pantalla, estado_juego)
-        clock.tick(MAX_FPS)
+        clock.tick(fps)
         pg.display.flip()
-""" 
-def primerMovimiento(horse1, estado_juego,  movimientos_val):
-    global movimiento_hecho, pos_actual_wN, clock
-    nueva_coordenada_wN = start(horse1)   
-    pos_actual_wN = nueva_coordenada_wN
-    print("nueva: ", nueva_coordenada_wN) 
-    print("validos: ", movimientos_val)
-    mover = ChessEngine.Mover(estado_juego.nuevo_tablero[1], nueva_coordenada_wN, estado_juego.tablero)
-    
-    if mover in movimientos_val:
-        print("es válido")
-        clock.tick(1)
-        estado_juego.realizar_movimiento(mover)
-        movimiento_hecho = True
-        print("marcador: ", estado_juego.marcador) """
 
 def dibujarEstadoJuego(pantalla, estado_juego):
     dibujarTablero(pantalla)
@@ -160,6 +147,21 @@ def dibujarPiezas(pantalla, tablero):
             pieza = tablero[fila][columna]
             if pieza != "--": #una pieza no vacía
                 pantalla.blit(IMAGENES[pieza], pg.Rect(columna*TAM_CUADRADO, fila*TAM_CUADRADO, TAM_CUADRADO, TAM_CUADRADO))
+
+def game_over(pantalla, fin, estado_juego):
+    pantalla.fill("black")
+    ganador = "¡Ha ganado la Máquina!" if fin == "P1" else "¡Has ganado!"
+    mensaje = get_font(21).render(ganador, True, "White")
+    mensaje_marcador = get_font(21).render(str(estado_juego.marcador[0])+" - "+str(estado_juego.marcador[1]), True, "White")
+    print(ganador+"\n"+str(estado_juego.marcador[0])+" - "+str(estado_juego.marcador[1]))
+    cuadro_mensaje = mensaje.get_rect(center=(ANCHO//2, 280))
+    cuadro_mensaje_marcador = mensaje_marcador.get_rect(center=(ANCHO//2, 300))
+    pantalla.blit(mensaje, cuadro_mensaje)
+    pantalla.blit(mensaje_marcador, cuadro_mensaje_marcador)
+    pg.display.update()
+
+def get_font(size): # Returns Press-Start-2P in the desired size
+    return pg.font.Font("resources/assets/font.ttf", size)
 
 if __name__ == "__main__":
     profundidad = 2
