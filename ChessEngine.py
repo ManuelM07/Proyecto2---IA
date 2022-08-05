@@ -68,15 +68,12 @@ class EstadoJuego():
                 elif valor != "--":
                     lista_movimientos.append((fila, col))
                     
-        print("mundo_actual: ", nuevo_tablero)
-        #nuevo_tablero = list(map(lambda fila : list(map(lambda x : valores[x], fila)), self.tablero))
         return [nuevo_tablero, pos_wN, pos_bN, lista_movimientos]
 
 
 
     def realizar_movimiento(self, mover):
         actual = self.tablero[mover.fila_inicial][mover.columna_inicial]
-        #print("actual: ", mover.pieza_movida)
         if (actual == "wN" or actual == "bN"):
             self.tablero[mover.fila_inicial][mover.columna_inicial] = "--"
             self.tablero[mover.fila_final][mover.columna_final] = mover.pieza_movida
@@ -111,7 +108,6 @@ class EstadoJuego():
     def get_movimientos_caballo(self, fila, columna, movimientos):
         movimientos_caballo =  ( (-2,-1), (-2,1), (-1,-2), (-1,2), (1,-2), (1,2), (2,-1), (2,1) )
         color_aliado = "w" if self.mueve_blanco else "b"
-        print("fila,columna:", fila, columna)
         
         for mov in movimientos_caballo:
             fila_f = fila + mov[0]

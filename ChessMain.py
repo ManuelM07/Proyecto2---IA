@@ -29,7 +29,7 @@ def cargar_imagenes():
 Principal driver del código, Manejará la entrada del usuario y actualizará los gráficos.
 """
 def main(profundidad):
-    global movimiento_hecho, clock
+    global movimiento_hecho, clock, fps
     #setup
     pg.init()
     pantalla = pg.display.set_mode((ANCHO, ALTO))
@@ -42,7 +42,6 @@ def main(profundidad):
     estado_juego = ChessEngine.EstadoJuego()
     movimientos_val = estado_juego.get_mov_validos()
     lista_movimientos = list(map(lambda mov: (mov.fila_final, mov.columna_final), movimientos_val))
-    print("mov válidos: ", lista_movimientos)
     movimiento_hecho = False # variable bandera para cuando se realiza un movimiento
     horse1 = Horse(estado_juego.nuevo_tablero[0], estado_juego.nuevo_tablero[1], estado_juego.nuevo_tablero[2], 9, 0)
     nueva_coordenada_wN = ()
@@ -55,7 +54,7 @@ def main(profundidad):
     #se muestra por primera vez la interfaz gráfica.
     dibujarEstadoJuego(pantalla, estado_juego)
     pg.display.flip()
-
+    clock.tick(fps)
     fin = False
 
     while ejecutando:
@@ -78,14 +77,9 @@ def main(profundidad):
                     mover = ChessEngine.Mover(clicks_jugador[0], clicks_jugador[1], estado_juego.tablero)
                     print(mover.getNotacionAjedrez())
                     lista_movimientos = list(map(lambda mov: (mov.fila_final, mov.columna_final), movimientos_val))
-                    print("mov válidos: ", lista_movimientos)
-                    print("tablero: ", estado_juego.tablero)
-                    print("coordenada:", cuadrado_seleccionado)
                     if mover in movimientos_val:
-                        print("el caballo negro se movió")
 
                         estado_juego.realizar_movimiento(mover)
-                        #print("pieza capturada: ", mover.pieza_capturada)
                         movimiento_hecho = True
                         cuadrado_seleccionado = () #restablecer los clicks del usuario
                         clicks_jugador = []
@@ -93,42 +87,43 @@ def main(profundidad):
                     else: 
                         print("¡movimiento inválido!")
                         clicks_jugador = [cuadrado_seleccionado]
-                    
+
+                if not fin:
+                    dibujarEstadoJuego(pantalla, estado_juego)
+                    clock.tick(fps)
+                    pg.display.flip()
+
+        if movimiento_hecho and not fin:
+            movimientos_val = estado_juego.get_mov_validos()
+            movimiento_hecho = False
+            fin = estado_juego.termina_juego()
+            if fin:
+                dibujarEstadoJuego(pantalla, estado_juego)
+                clock.tick(1)
+                pg.display.flip()
+                game_over(pantalla, fin, estado_juego)
+
         if estado_juego.mueve_blanco and not fin:
             fps = 1
             nuevo_tablero = estado_juego.mapear_matriz()
             #horse1 = Horse(estado_juego.nuevo_tablero[0], estado_juego.nuevo_tablero[1], estado_juego.nuevo_tablero[2], 9, 0)
-            print("nuevo:", nuevo_tablero[0])
             nueva_coordenada_wN = start(Horse(nuevo_tablero[0], nuevo_tablero[1], nuevo_tablero[2], 9, 0), nuevo_tablero[3], profundidad)  
 
-            print("nueva: ", nueva_coordenada_wN) 
-            print("válidos: ", (movimientos_val[0].fila_final, movimientos_val[0].columna_final), (movimientos_val[1].fila_final, movimientos_val[1].columna_final))
             mover = ChessEngine.Mover(nuevo_tablero[1], nueva_coordenada_wN, estado_juego.tablero)
             if mover in movimientos_val:
                 estado_juego.realizar_movimiento(mover)
-                print("valido caballo blanco")
                 movimiento_hecho = True
-                print("mov_hecho: ", movimiento_hecho)
                 print("marcador: ", estado_juego.marcador)
                 cuadrado_seleccionado = () #restablecer los clicks del usuario
                 clicks_jugador = []
             else:
                 print("¡inválido!")
 
-        if not fin:
-            dibujarEstadoJuego(pantalla, estado_juego)
+            if not fin:
+                dibujarEstadoJuego(pantalla, estado_juego)
+                clock.tick(fps)
+                pg.display.flip()
 
-        if movimiento_hecho and not fin:
-            print("entra a movimiento_hecho")
-            movimientos_val = estado_juego.get_mov_validos()
-            movimiento_hecho = False
-            fin = estado_juego.termina_juego()
-            if fin:
-                clock.tick(1)
-                game_over(pantalla, fin, estado_juego)
-
-        clock.tick(fps)
-        pg.display.flip()
 
 def dibujarEstadoJuego(pantalla, estado_juego):
     dibujarTablero(pantalla)
@@ -154,7 +149,7 @@ def game_over(pantalla, fin, estado_juego):
     mensaje = get_font(21).render(ganador, True, "White")
     mensaje_marcador = get_font(21).render(str(estado_juego.marcador[0])+" - "+str(estado_juego.marcador[1]), True, "White")
     print(ganador+"\n"+str(estado_juego.marcador[0])+" - "+str(estado_juego.marcador[1]))
-    cuadro_mensaje = mensaje.get_rect(center=(ANCHO//2, 280))
+    cuadro_mensaje = mensaje.get_rect(center=(ANCHO//2, 250))
     cuadro_mensaje_marcador = mensaje_marcador.get_rect(center=(ANCHO//2, 300))
     pantalla.blit(mensaje, cuadro_mensaje)
     pantalla.blit(mensaje_marcador, cuadro_mensaje_marcador)

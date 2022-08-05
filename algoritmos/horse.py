@@ -40,10 +40,7 @@ class Horse:
                 self.x = self.direcciones[DIRECCIONES[i]][0]
                 self.y = self.direcciones[DIRECCIONES[i]][1]
                 try: # Excepción para capturar el error en el nodo 1, debido a que en ese momento no tiene definido padre
-                    if self.tipo_jugador == 9: # machine
-                        utilidad = (self.mundo_aux[self.x][self.y] - self.padre.utilidad)*profundidad # si es Max(maquina) -> item - puntos acumulados
-                    else: # human
-                        utilidad = (self.mundo_aux[self.x][self.y] - self.padre.utilidad)*profundidad # si es Min(humano) -> puntos acumulados - item
+                    utilidad = (self.mundo_aux[self.x][self.y] - self.padre.utilidad)*profundidad # si es Max(maquina) -> item - puntos acumulados
                 except AttributeError:
                     utilidad = self.mundo_aux[self.x][self.y]
 
@@ -54,12 +51,10 @@ class Horse:
                 new_nodo = Nodo(nuevo_mundo_aux, self.direcciones[DIRECCIONES[i]], utilidad, self.padre)
                 
                 lista_movimientos.append(new_nodo)
-        #print("LISTA:", lista_movimientos)
         return np.array(lista_movimientos)
         
 
     def verifica_movimiento(self, nueva_coordenada) -> bool:
-        #print("mundo_aux: ", self.mundo_aux)
         if (nueva_coordenada[0] >= 0 and nueva_coordenada[0] < len(self.mundo[0])
             and nueva_coordenada[1] >= 0 and nueva_coordenada[1] < len(self.mundo) 
             and (self.mundo_aux[nueva_coordenada[0]][nueva_coordenada[1]] != 8 and self.mundo_aux[nueva_coordenada[0]][nueva_coordenada[1]] != 9)):
