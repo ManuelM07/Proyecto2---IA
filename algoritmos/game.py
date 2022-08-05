@@ -73,12 +73,12 @@ def start(horse1, lista_movimientos, profundidad_aux):
                     horse1.padre = all_profundidad[i-1].padres_hijos[count].hijos[j] #horse1.nuevos_movimientos[j]
 
                 j += 1
-                hijos = horse1.movimientos()
+                hijos = horse1.movimientos(profundidad-i)
 
                 aux_profundidad = np.append(aux_profundidad, PadreHijo(horse1.padre, hijos))        
             ###########
         else: 
-            hijos = horse1.movimientos()
+            hijos = horse1.movimientos(profundidad-i)
             horse1.nuevos_movimientos = hijos
             aux_profundidad = np.append(aux_profundidad, PadreHijo(hijos=hijos))
         all_profundidad.append(Profundidad(aux_profundidad))
@@ -92,15 +92,15 @@ def _max(lista) -> bool:
     guarda la decisión en el atributo nodo_elegido del padre correspondiente"""
     for padre_hijos in lista:
         sub_hijos = padre_hijos.hijos
-        o_max = (sub_hijos[0].nodo_elegido, sub_hijos[0].nodo_elegido.utilidad)
+        o_max = (sub_hijos[0].nodo_elegido, abs(sub_hijos[0].nodo_elegido.utilidad))
         for i in range(1, len(sub_hijos)):
-            if sub_hijos[i].nodo_elegido.utilidad > o_max[1]:
-                o_max = (sub_hijos[i].nodo_elegido, sub_hijos[i].nodo_elegido.utilidad)        
+            if abs(sub_hijos[i].nodo_elegido.utilidad) > o_max[1]:
+                o_max = (sub_hijos[i].nodo_elegido, abs(sub_hijos[i].nodo_elegido.utilidad))        
         try: # En la profundidad 1, los nodos no tienen padres, por consecuencia no tienen nodos elegidos, 
              # por lo anterior se captura la excepción de tipo AttributeError y se crea un nuevo padre para el nodo en consecuencia
             padre_hijos.padre.nodo_elegido = o_max[0]  
         except AttributeError:
-            if o_max[1] == 0:
+            if o_max[1] == 0 and all_zeros(sub_hijos):
                 print("Holaaaaa")
                                                         
                 padre_hijos.padre = random.choice(sub_hijos).nodo_elegido
@@ -155,6 +155,13 @@ def obtener_movimiento() -> tuple:
     print("mundo:", answer.mundo)
     print("PROFUNDI:", all_profundidad)
     return answer.coordenadas
+
+
+def all_zeros(lista):
+    for x in lista:
+        if x.nodo_elegido.utilidad != 0:
+            return False
+    return True
 
 
 #start()

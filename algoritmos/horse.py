@@ -24,7 +24,7 @@ class Horse:
 
 
 
-    def movimientos(self) -> list:
+    def movimientos(self, profundidad) -> list:
         if self.start:
             
             self.mundo_aux = self.padre.mundo.copy()
@@ -41,9 +41,9 @@ class Horse:
                 self.y = self.direcciones[DIRECCIONES[i]][1]
                 try: # Excepción para capturar el error en el nodo 1, debido a que en ese momento no tiene definido padre
                     if self.tipo_jugador == 9: # machine
-                        utilidad = self.mundo_aux[self.x][self.y] - self.padre.utilidad # si es Max(maquina) -> item - puntos acumulados
+                        utilidad = (self.mundo_aux[self.x][self.y] - self.padre.utilidad)*profundidad # si es Max(maquina) -> item - puntos acumulados
                     else: # human
-                        utilidad = self.padre.utilidad - self.mundo_aux[self.x][self.y] # si es Min(humano) -> puntos acumulados - item
+                        utilidad = (self.mundo_aux[self.x][self.y] - self.padre.utilidad)*profundidad # si es Min(humano) -> puntos acumulados - item
                 except AttributeError:
                     utilidad = self.mundo_aux[self.x][self.y]
 
