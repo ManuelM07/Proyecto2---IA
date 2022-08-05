@@ -101,22 +101,22 @@ def main():
             #horse1 = Horse(estado_juego.nuevo_tablero[0], estado_juego.nuevo_tablero[1], estado_juego.nuevo_tablero[2], 9, 0)
             print("nuevo:", nuevo_tablero[0])
             nueva_coordenada_wN = start(Horse(nuevo_tablero[0], nuevo_tablero[1], nuevo_tablero[2], 9, 0))  
-            
+
             print("nueva: ", nueva_coordenada_wN) 
-            print("válidos: ", movimientos_val)
+            print("válidos: ", (movimientos_val[0].fila_final, movimientos_val[0].columna_final), (movimientos_val[1].fila_final, movimientos_val[1].columna_final))
             mover = ChessEngine.Mover(pos_actual_wN, nueva_coordenada_wN, estado_juego.tablero)
             pos_actual_wN = nueva_coordenada_wN
-            if mover in movimientos_val:
-                clock.tick(1)
-                estado_juego.realizar_movimiento(mover)
-                print("valido caballo blanco")
-                movimiento_hecho = True
-                print("mov_hecho: ", movimiento_hecho)
-                print("marcador: ", estado_juego.marcador)
-                cuadrado_seleccionado = () #restablecer los clicks del usuario
-                clicks_jugador = []
-            else:
-                print("¡inválido!")
+            #if mover in movimientos_val:
+            clock.tick(1)
+            estado_juego.realizar_movimiento(mover)
+            print("valido caballo blanco")
+            movimiento_hecho = True
+            print("mov_hecho: ", movimiento_hecho)
+            print("marcador: ", estado_juego.marcador)
+            cuadrado_seleccionado = () #restablecer los clicks del usuario
+            clicks_jugador = []
+            #else:
+            #    print("¡inválido!")
 
 
         if movimiento_hecho:

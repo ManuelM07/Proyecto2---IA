@@ -31,6 +31,9 @@ mundo_aux = [ # maquina -> 9, humano -> 8
 #horse1 = None #Horse(mundo_aux, (2, 2), (3, 3), 9, 0)
 #horse1.nuevos_movimientos
 def start(horse1):
+    global all_profundidad
+
+    all_profundidad = []
     for i in range(profundidad): # itera la cantidad de profundidades que hay
         count = 0
         aux_profundidad = np.array([])
@@ -134,6 +137,7 @@ def obtener_movimiento() -> tuple:
     for _ in range(profundidad-1): # hace un recorrido hasta el ultimo padre, ya que es el que guarda la coordenada hacia donde debe moverse
         answer = answer.padre
     print("mundo:", answer.mundo)
+    print("PROFUNDI:", all_profundidad)
     return answer.coordenadas
 
 
@@ -142,3 +146,15 @@ def obtener_movimiento() -> tuple:
 #print(all_profundidad[0].padres_hijos[0].padre)
 #print(cantidad_nodos)
 #print(all_profundidad[profundidad-1].padres_hijos[0].hijos[0].utilidad)
+
+
+
+#-----------------
+'''def primerMovimiento(horse1, estado_juego,  movimientos_val):
+    global movimiento_hecho, pos_actual_wN, clock
+    nueva_coordenada_wN = start(horse1)   
+    pos_actual_wN = nueva_coordenada_wN
+    print("nueva: ", nueva_coordenada_wN) 
+    print("validos: ", movimientos_val)
+    mover = ChessEngine.Mover(estado_juego.nuevo_tablero[1], nueva_coordenada_wN, estado_juego.tablero)'''
+    
