@@ -28,7 +28,7 @@ def cargar_imagenes():
 """ 
 Principal driver del código, Manejará la entrada del usuario y actualizará los gráficos.
 """
-def main():
+def main(profundidad):
     global movimiento_hecho, pos_actual_wN, clock
     #setup
     pg.init()
@@ -100,7 +100,7 @@ def main():
             nuevo_tablero = estado_juego.mapear_matriz()
             #horse1 = Horse(estado_juego.nuevo_tablero[0], estado_juego.nuevo_tablero[1], estado_juego.nuevo_tablero[2], 9, 0)
             print("nuevo:", nuevo_tablero[0])
-            nueva_coordenada_wN = start(Horse(nuevo_tablero[0], nuevo_tablero[1], nuevo_tablero[2], 9, 0), nuevo_tablero[3], 6)  
+            nueva_coordenada_wN = start(Horse(nuevo_tablero[0], nuevo_tablero[1], nuevo_tablero[2], 9, 0), nuevo_tablero[3], profundidad)  
 
             print("nueva: ", nueva_coordenada_wN) 
             print("válidos: ", (movimientos_val[0].fila_final, movimientos_val[0].columna_final), (movimientos_val[1].fila_final, movimientos_val[1].columna_final))
@@ -162,4 +162,5 @@ def dibujarPiezas(pantalla, tablero):
                 pantalla.blit(IMAGENES[pieza], pg.Rect(columna*TAM_CUADRADO, fila*TAM_CUADRADO, TAM_CUADRADO, TAM_CUADRADO))
 
 if __name__ == "__main__":
-    main()
+    profundidad = 2
+    main(profundidad)
