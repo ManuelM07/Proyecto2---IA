@@ -54,6 +54,7 @@ class EstadoJuego():
         nuevo_tablero = []
         pos_wN = ()
         pos_bN = ()
+        lista_movimientos = []
         
         for fila in range(len(self.tablero)):
             nuevo_tablero.append([])
@@ -64,9 +65,12 @@ class EstadoJuego():
                     pos_wN = (fila, col)
                 elif valor == "bN":
                     pos_bN = (fila, col)
+                elif valor != "--":
+                    lista_movimientos.append((fila, col))
+                    
         print("mundo_actual: ", nuevo_tablero)
         #nuevo_tablero = list(map(lambda fila : list(map(lambda x : valores[x], fila)), self.tablero))
-        return [nuevo_tablero, pos_wN, pos_bN]
+        return [nuevo_tablero, pos_wN, pos_bN, lista_movimientos]
 
 
 

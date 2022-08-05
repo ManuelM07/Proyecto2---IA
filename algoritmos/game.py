@@ -2,6 +2,7 @@ from algoritmos.horse import Horse
 from algoritmos.padre_hijo import PadreHijo
 from algoritmos.profundidad import Profundidad
 import numpy as np
+import random
 
 
 all_profundidad = []
@@ -12,17 +13,18 @@ test_list = [ # maquina -> 9, humano -> 8
     [3, 5, 0, 0, 0], # 3
     [1, 0, 0, 0, 0], # 4
 ]
-profundidad = 6
+profundidad = 0
+lista_movimientos_aux = []
 
 mundo_aux = [ # maquina -> 9, humano -> 8
     [0, 1, 0, 3, 0, 3, 0, 0], # 0
-    [0, 1, 1, 3, 5, 0, 0, 0], # 1
+    [0, 1, 1, 3, 5, 0, 5, 0], # 1
     [0, 1, 9, 3, 0, 1, 0, 0], # 2
-    [0, 1, 1, 8, 1, 0, 3, 0], # 3
+    [0, 1, 1, 8, 1, 3, 3, 0], # 3
     [0, 1, 0, 3, 0, 5, 0, 0], # 4
-    [0, 1, 1, 3, 1, 0, 0, 0], # 5
-    [0, 1, 0, 3, 0, 3, 0, 0], # 6
-    [0, 1, 0, 3, 0, 0, 3, 0], # 7
+    [0, 1, 0, 9, 0, 0, 0, 0], # 5
+    [0, 9, 0, 3, 0, 3, 0, 0], # 6
+    [0, 0, 0, 0, 0, 0, 3, 0], # 7
 ]
 #cantidad_nodos = 0
 
@@ -30,8 +32,17 @@ mundo_aux = [ # maquina -> 9, humano -> 8
 # humanoide = 3 3 3 1 1 1 1 1
 #horse1 = None #Horse(mundo_aux, (2, 2), (3, 3), 9, 0)
 #horse1.nuevos_movimientos
-def start(horse1):
-    global all_profundidad
+
+# función que calcula la distancia de manhattan de un nodo con respecto a un ítem.
+def manhattan(x1, y1, x2, y2): # nodo, pos_item
+    # resultado = abs(nodo.x - pos_item['posx']) + abs(nodo.y - pos_item['posy'])
+    resultado = abs(x2 - x1) + abs(y2 - y1)
+    return resultado
+
+def start(horse1, lista_movimientos, profundidad_aux): 
+    global all_profundidad, lista_movimientos_aux, profundidad
+    lista_movimientos_aux = lista_movimientos
+    profundidad = profundidad_aux
 
     all_profundidad = []
     for i in range(profundidad): # itera la cantidad de profundidades que hay
@@ -88,8 +99,13 @@ def _max(lista) -> bool:
         try: # En la profundidad 1, los nodos no tienen padres, por consecuencia no tienen nodos elegidos, 
              # por lo anterior se captura la excepción de tipo AttributeError y se crea un nuevo padre para el nodo en consecuencia
             padre_hijos.padre.nodo_elegido = o_max[0]  
-        except AttributeError: 
-            padre_hijos.padre = o_max[0]   
+        except AttributeError:
+            if o_max[1] == 0:
+                print("Holaaaaa")
+                                                        
+                padre_hijos.padre = random.choice(sub_hijos).nodo_elegido
+            else:
+                padre_hijos.padre = o_max[0]   
     return True
         
 

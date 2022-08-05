@@ -100,7 +100,7 @@ def main():
             nuevo_tablero = estado_juego.mapear_matriz()
             #horse1 = Horse(estado_juego.nuevo_tablero[0], estado_juego.nuevo_tablero[1], estado_juego.nuevo_tablero[2], 9, 0)
             print("nuevo:", nuevo_tablero[0])
-            nueva_coordenada_wN = start(Horse(nuevo_tablero[0], nuevo_tablero[1], nuevo_tablero[2], 9, 0))  
+            nueva_coordenada_wN = start(Horse(nuevo_tablero[0], nuevo_tablero[1], nuevo_tablero[2], 9, 0), nuevo_tablero[3], 6)  
 
             print("nueva: ", nueva_coordenada_wN) 
             print("válidos: ", (movimientos_val[0].fila_final, movimientos_val[0].columna_final), (movimientos_val[1].fila_final, movimientos_val[1].columna_final))
