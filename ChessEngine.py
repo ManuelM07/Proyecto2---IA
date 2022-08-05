@@ -30,7 +30,6 @@ class EstadoJuego():
         self.generar_random()
         self.nuevo_tablero = self.mapear_matriz()
 
-
     
     def generar_random(self):
         posibilidades = [ "wN", "bN",
@@ -45,7 +44,6 @@ class EstadoJuego():
             if anterior == "--":
                 random.shuffle(posibilidades)
                 self.tablero[fila][columna] = posibilidades.pop()
-        self.mapear_matriz()
         
     
     def mapear_matriz(self):
@@ -56,7 +54,7 @@ class EstadoJuego():
         nuevo_tablero = []
         pos_wN = ()
         pos_bN = ()
-
+        
         for fila in range(len(self.tablero)):
             nuevo_tablero.append([])
             for col in range(len(self.tablero[fila])):
@@ -66,7 +64,7 @@ class EstadoJuego():
                     pos_wN = (fila, col)
                 elif valor == "bN":
                     pos_bN = (fila, col)
-    
+        print("mundo_actual: ", nuevo_tablero)
         #nuevo_tablero = list(map(lambda fila : list(map(lambda x : valores[x], fila)), self.tablero))
         return [nuevo_tablero, pos_wN, pos_bN]
 
@@ -107,12 +105,13 @@ class EstadoJuego():
     def get_movimientos_caballo(self, fila, columna, movimientos):
         movimientos_caballo =  ( (-2,-1), (-2,1), (-1,-2), (-1,2), (1,-2), (1,2), (2,-1), (2,1) )
         color_aliado = "w" if self.mueve_blanco else "b"
+        print("fila,columna:", fila, columna)
+        
         for mov in movimientos_caballo:
             fila_f = fila + mov[0]
             col_f = columna + mov[1]
             if (0 <= fila_f < 8 and 0 <= col_f < 8):
                 pieza_f = self.tablero[fila_f][col_f]
-                
                 if (pieza_f[0] != color_aliado) and (pieza_f[1] != "N"): #no hay una pieza aliada -> vacío o enemigo.
                     movimientos.append(Mover((fila, columna), (fila_f, col_f), self.tablero))
 

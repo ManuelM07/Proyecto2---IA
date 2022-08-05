@@ -1,6 +1,6 @@
-from horse import Horse
-from padre_hijo import PadreHijo
-from profundidad import Profundidad
+from algoritmos.horse import Horse
+from algoritmos.padre_hijo import PadreHijo
+from algoritmos.profundidad import Profundidad
 import numpy as np
 
 
@@ -28,10 +28,9 @@ mundo_aux = [ # maquina -> 9, humano -> 8
 
 # machine = 5 5 5 1 3
 # humanoide = 3 3 3 1 1 1 1 1
-
-horse1 = None #Horse(mundo_aux, (2, 2), (3, 3), 9, 0)
+#horse1 = None #Horse(mundo_aux, (2, 2), (3, 3), 9, 0)
 #horse1.nuevos_movimientos
-def start():
+def start(horse1):
     for i in range(profundidad): # itera la cantidad de profundidades que hay
         count = 0
         aux_profundidad = np.array([])
@@ -69,7 +68,7 @@ def start():
             horse1.nuevos_movimientos = hijos
             aux_profundidad = np.append(aux_profundidad, PadreHijo(hijos=hijos))
         all_profundidad.append(Profundidad(aux_profundidad))
-    
+
     return obtener_movimiento()
 
 
@@ -134,7 +133,7 @@ def obtener_movimiento() -> tuple:
     answer = all_profundidad[0].padres_hijos[0].padre
     for _ in range(profundidad-1): # hace un recorrido hasta el ultimo padre, ya que es el que guarda la coordenada hacia donde debe moverse
         answer = answer.padre
-        
+    print("mundo:", answer.mundo)
     return answer.coordenadas
 
 

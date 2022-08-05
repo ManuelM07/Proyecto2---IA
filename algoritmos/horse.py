@@ -1,5 +1,5 @@
 import numpy as np
-from nodo import Nodo
+from algoritmos.nodo import Nodo
 
 # caballo1 -> 1 -> machine
 # caballo2 -> 2 -> humanoide
@@ -23,9 +23,10 @@ class Horse:
         self.y = 0
 
 
+
     def movimientos(self) -> list:
         if self.start:
-            #print(self.padre)
+            
             self.mundo_aux = self.padre.mundo.copy()
             if not self.padre.padre is None:
                 self.coordenadas = (self.padre.padre.coordenadas[0], self.padre.padre.coordenadas[1])
@@ -58,6 +59,7 @@ class Horse:
         
 
     def verifica_movimiento(self, nueva_coordenada) -> bool:
+        #print("mundo_aux: ", self.mundo_aux)
         if (nueva_coordenada[0] >= 0 and nueva_coordenada[0] < len(self.mundo[0])
             and nueva_coordenada[1] >= 0 and nueva_coordenada[1] < len(self.mundo) 
             and (self.mundo_aux[nueva_coordenada[0]][nueva_coordenada[1]] != 8 and self.mundo_aux[nueva_coordenada[0]][nueva_coordenada[1]] != 9)):
